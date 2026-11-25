@@ -15,6 +15,7 @@ const {
   clearSupabaseCookies,
   supabaseRequest,
   getSupabaseUser,
+  refreshSupabaseSession,
   supabaseIdentity,
   CSRF_COOKIE,
   SUPABASE_ACCESS_COOKIE,
@@ -53,22 +54,22 @@ function parseState(state) {
 }
 
 router.get('/api/auth/config', (_req, res) => {
-  if (config.isSupabaseAuthConfigured()) {
-    return res.json({
-      provider: 'Supabase',
-      configured: true,
+  const configured = config.isSupabaseAuthConfigured();
+  return res.json({
+    provider: 'Supabase',
+    configured,
+    ...(configured ? {
       url: config.supabaseUrl,
       publishableKey: config.supabasePublishableKey
-    });
-  }
-  return res.json({ provider: 'Manus', configured: config.isAuthConfigured() });
+    } : {})
+  });
 });
 
 router.post('/api/auth/session', asyncRoute(async (req, res) => {
   if (!config.isSupabaseAuthConfigured()) return apiError(res, 503, 'AUTH_NOT_CONFIGURED', 'O login Supabase ainda não está configurado.');
   const accessToken = req.body?.accessToken;
   const refreshToken = req.body?.refreshToken;
-  if (typeof accessToken !== 'string' || accessToken.length > 8192 || typeof refreshToken !== 'string' || refreshToken.length > 8192) {
+  if (typeof accessToken !== 'string' || !accessToken || accessToken.length > 8192 || typeof refreshToken !== 'string' || !refreshToken || refreshToken.length > 8192) {
     return apiError(res, 400, 'INVALID_AUTH_SESSION', 'A sessão recebida do Supabase é inválida.');
   }
   const accessUser = await getSupabaseUser(accessToken);

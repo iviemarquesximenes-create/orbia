@@ -26,7 +26,7 @@ Manrope é a fonte de interface e valores; IBM Plex Mono fica restrita a referê
 
 O símbolo original é um O aberto, arredondado e conectado, em jade com ponto lima: encontro e entrada. O nome acompanha o símbolo como texto acessível; no login, o wordmark usa “orbia.” com ajuste tipográfico próprio.
 
-O ativo gerenciado definitivo é `/manus-storage/async-images/KXOoic961zEmCQ4t1Ne4Sc/image-1.webp`, usado no login, navegação e favicon. A cópia local `frontend/assets/orbia-jade.webp` conserva os mesmos bytes para portabilidade. Os metadados de plataforma em `app.config.ts` usam a URL HTTPS durável `https://files.manuscdn.com/user_upload_by_module/session_file/310419663031275235/IWLXFruHJmInprgC.webp`.
+O ativo local `frontend/assets/orbia-jade.webp` é servido em `/assets/orbia-jade.webp` no login, na navegação e no favicon, sem depender de armazenamento externo.
 
 ## Aplicação responsiva
 

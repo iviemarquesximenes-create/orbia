@@ -15,7 +15,7 @@ before(async () => {
 after(async () => new Promise((resolve) => server.close(resolve)));
 
 test('HTML, CSS, JS e manifesto são públicos sem expor dados', async () => {
-  for (const path of ['/', '/login.html', '/pages/financial.html', '/css/orbia.css', '/js/api.js']) {
+  for (const path of ['/', '/login.html', '/pages/financial.html', '/assets/orbia-jade.webp', '/css/orbia.css', '/js/api.js']) {
     const response = await fetch(base + path);
     assert.equal(response.status, 200, path);
   }
@@ -31,7 +31,8 @@ test('configuração pública de autenticação divulga somente a chave Supabase
   const response = await fetch(base + '/api/auth/config');
   assert.equal(response.status, 200);
   const body = await response.json();
-  assert.equal(body.configured, config.isSupabaseAuthConfigured() || config.isAuthConfigured());
+  assert.equal(body.provider, 'Supabase');
+  assert.equal(body.configured, config.isSupabaseAuthConfigured());
   if (config.isSupabaseAuthConfigured()) {
     assert.equal(body.provider, 'Supabase');
     assert.equal(body.url, config.supabaseUrl);
