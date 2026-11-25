@@ -18,9 +18,31 @@
       const card = node('article', 'review-item');
       const head = node('div', 'review-item-head');
       head.append(node('h3', '', item.summary), node('span', item.status === 'pending' ? 'status-badge status-badge--review' : 'status-badge status-badge--neutral', labels[item.status] || item.status));
-      card.append(head, node('p', '', `Categoria: ${item.category} · Origem: ${item.source_channel || 'manual'} · ${new Date(item.created_at).toLocaleDateString('pt-BR')}`));
+      const sourceKind = item.payload?.isGroup ? ' · Grupo WhatsApp' : '';
+      card.append(head, node('p', '', `Categoria: ${item.category} · Origem: ${item.source_channel || 'manual'}${sourceKind} · ${new Date(item.created_at).toLocaleDateString('pt-BR')}`));
       const sourceText = item.payload?.text || item.payload?.sourceText || '';
       if (sourceText) card.append(node('p', '', `Origem registrada: ${sourceText}`));
+      const attachments = Array.isArray(item.payload?.attachments) ? item.payload.attachments : [];
+      for (const [index, attachment] of attachments.entries()) {
+        const openAttachment = node('button', 'button button--tiny button--outline', `Abrir anexo: ${attachment.fileName || 'arquivo'}`);
+        openAttachment.type = 'button';
+        openAttachment.addEventListener('click', async () => {
+          const tab = window.open('about:blank', '_blank');
+          if (!tab) {
+            toast('Permita a abertura de uma nova aba para consultar o anexo.', 'error');
+            return;
+          }
+          tab.opener = null;
+          try {
+            const result = await api(`/api/review/${item.id}/attachments/${index}/url`);
+            tab.location.href = result.item.url;
+          } catch (error) {
+            tab.close();
+            toast(error.message, 'error');
+          }
+        });
+        card.append(openAttachment);
+      }
       if (item.status === 'pending' && ['admin','syndic','finance'].includes(state.tenant?.role)) {
         const actions = node('div', 'review-item-actions');
         for (const [action, label] of [['approve','Confirmar revisão'],['reject','Rejeitar'],['ignore','Ignorar'],['clarify','Pedir esclarecimento']]) {

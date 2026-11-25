@@ -61,6 +61,18 @@
     if (!state.tenant) {
       onboarding.hidden = false;
       content.hidden = true;
+      const canCreateTenant = state.user?.accountType === 'sindico';
+      const createButton = onboarding.querySelector('[data-flow-open="create-tenant-form"]');
+      const createForm = document.getElementById('create-tenant-form');
+      const creationRestriction = document.getElementById('tenant-creation-restriction');
+      if (createButton) createButton.hidden = !canCreateTenant;
+      if (!canCreateTenant) {
+        if (creationRestriction) creationRestriction.hidden = false;
+        createForm?.setAttribute('hidden', '');
+      } else {
+        createForm?.removeAttribute('hidden');
+        if (creationRestriction) creationRestriction.hidden = true;
+      }
       return;
     }
     onboarding.hidden = true;

@@ -7,9 +7,29 @@ const { apiError, asyncRoute, requiredText, isUuid } = require('../lib/http');
 const { requireAuth } = require('../middleware/auth');
 const { requireTenant, authorize } = require('../middleware/tenant');
 const { writeAudit } = require('../services/audit');
+const { createSignedAttachmentUrl, isTenantStoragePath } = require('../services/attachment-storage');
 
 const router = Router();
 router.use('/api/review', requireAuth, requireTenant);
+
+router.get('/api/review/:itemId/attachments/:attachmentIndex/url', authorize('review:read'), asyncRoute(async (req, res) => {
+  const attachmentIndex = /^\d+$/.test(req.params.attachmentIndex) ? Number(req.params.attachmentIndex) : -1;
+  if (!isUuid(req.params.itemId) || !Number.isSafeInteger(attachmentIndex) || attachmentIndex < 0 || attachmentIndex > 4) {
+    return apiError(res, 400, 'INVALID_ATTACHMENT', 'Anexo inválido.');
+  }
+  const { rows } = await getPool().query(
+    'SELECT payload_json FROM ai_review_queue WHERE tenant_id = $1 AND id = $2 LIMIT 1',
+    [req.tenant.id, req.params.itemId]
+  );
+  if (!rows.length) return apiError(res, 404, 'REVIEW_ITEM_NOT_FOUND', 'O registro solicitado não foi encontrado.');
+  const payload = typeof rows[0].payload_json === 'string' ? JSON.parse(rows[0].payload_json) : rows[0].payload_json;
+  const attachment = Array.isArray(payload?.attachments) ? payload.attachments[attachmentIndex] : null;
+  if (!attachment || !isTenantStoragePath(attachment.storagePath, req.tenant.id)) {
+    return apiError(res, 404, 'ATTACHMENT_NOT_FOUND', 'O anexo solicitado não foi encontrado.');
+  }
+  const url = await createSignedAttachmentUrl(attachment.storagePath);
+  return res.json({ item: { url, expiresInSeconds: 300 } });
+}));
 
 router.get('/api/review', authorize('review:read'), asyncRoute(async (req, res) => {
   const { rows } = await getPool().query('SELECT id, category, summary, payload_json, confidence, source_channel, source_message_id, status, created_at FROM ai_review_queue WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 100', [req.tenant.id]);

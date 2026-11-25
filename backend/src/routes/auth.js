@@ -178,7 +178,7 @@ router.get('/api/auth/me', requireAuth, asyncRoute(async (req, res) => {
   const csrfToken = req.supabaseAuthenticated
     ? req.csrfToken || readCookie(req, CSRF_COOKIE)
     : createCsrfToken(req.identity.openId);
-  return res.json({ user: { id: req.user.id, name: req.user.display_name, email: req.user.email }, csrfToken, tenants: rows.map((row) => ({ id: row.id, name: row.name, isDemo: Boolean(row.is_demo), role: row.role })) });
+  return res.json({ user: { id: req.user.id, name: req.user.display_name, email: req.user.email, accountType: req.user.account_type }, csrfToken, tenants: rows.map((row) => ({ id: row.id, name: row.name, isDemo: Boolean(row.is_demo), role: row.role })) });
 }));
 
 module.exports = router;

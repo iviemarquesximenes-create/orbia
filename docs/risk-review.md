@@ -64,7 +64,7 @@
 
 **Impacto:** comprovantes, notas e documentos pessoais podem vazar por URL aberta, tenant errado ou retenção indefinida.
 
-**Mitigação:** guardar metadados e ACL por tenant, usar links assinados/temporários quando storage permitir, validar acesso no servidor, limitar tipo/tamanho, auditar download e definir retenção. Não disponibilizar arquivo privado por link previsível.
+**Mitigação:** anexos do webhook são gravados em bucket privado por caminho isolado por tenant; a API valida MIME/tamanho/referência, autoriza o acesso pela membership e emite URL assinada de cinco minutos. O service role fica somente no servidor. Ainda faltam retenção/backups, auditoria específica de download e verificação do conteúdo real do arquivo.
 
 ### 11. Amplitude do escopo e baixa confiabilidade operacional
 

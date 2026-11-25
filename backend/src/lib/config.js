@@ -17,6 +17,8 @@ const config = Object.freeze({
   databaseUrl: optional('DATABASE_URL'),
   supabaseUrl: optional('NEXT_PUBLIC_SUPABASE_URL'),
   supabasePublishableKey: optional('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'),
+  supabaseServiceRoleKey: optional('SUPABASE_SERVICE_ROLE_KEY'),
+  supabaseStorageBucket: optional('SUPABASE_STORAGE_BUCKET') || 'orbia-private-documents',
   manusProjectId: optional('MANUS_PROJECT_ID'),
   oauthPortalUrl: optional('MANUS_OAUTH_PORTAL_URL'),
   oauthApiUrl: optional('MANUS_OAUTH_API_URL'),
@@ -28,6 +30,9 @@ const config = Object.freeze({
   },
   isSupabaseAuthConfigured() {
     return Boolean(this.supabaseUrl && this.supabasePublishableKey);
+  },
+  isSupabaseStorageConfigured() {
+    return Boolean(this.supabaseUrl && this.supabaseServiceRoleKey);
   },
   isDatabaseConfigured() {
     return Boolean(this.databaseUrl);

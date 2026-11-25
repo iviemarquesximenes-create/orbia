@@ -176,7 +176,7 @@ async function ensureUser(identity) {
      VALUES ($1, $2, $3, $4)
      ON CONFLICT (manus_open_id) DO UPDATE
        SET display_name = EXCLUDED.display_name, email = EXCLUDED.email, updated_at = now()
-     RETURNING id, manus_open_id, display_name, email`,
+     RETURNING id, manus_open_id, display_name, email, account_type`,
     [identity.userId || randomUUID(), identity.openId, identity.name || 'Usuário ORBIA', identity.email || null]
   );
   if (!rows.length) throw new Error('AUTH_USER_NOT_FOUND');

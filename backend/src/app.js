@@ -23,6 +23,7 @@ const databaseConnectionErrorCodes = new Set([
   'DEPTH_ZERO_SELF_SIGNED_CERT', 'SELF_SIGNED_CERT_IN_CHAIN',
   'UNABLE_TO_VERIFY_LEAF_SIGNATURE', 'ERR_TLS_CERT_ALTNAME_INVALID'
 ]);
+const requiredMigrations = ['001_orbia_schema.sql', '002_syndic_account_type.sql'];
 
 function isDatabaseConnectionError(error) {
   const code = String(error?.code || '');
@@ -65,8 +66,11 @@ app.get('/api/health', async (_req, res) => {
     if (databaseReady) {
       try {
         const pool = getPool();
-        const { rows } = await pool.query("SELECT COUNT(*) AS total FROM public.schema_migrations WHERE name = '001_orbia_schema.sql'");
-        migrationsReady = Number(rows[0].total) === 1;
+        const { rows } = await pool.query(
+          'SELECT COUNT(DISTINCT name) AS total FROM public.schema_migrations WHERE name = ANY($1::text[])',
+          [requiredMigrations]
+        );
+        migrationsReady = Number(rows[0].total) === requiredMigrations.length;
       } catch {
         migrationsReady = false;
       }
@@ -80,6 +84,7 @@ app.get('/api/health', async (_req, res) => {
       database: databaseStatus,
       migrations: migrationsReady ? 'current' : 'pending',
       authentication: authenticationReady ? 'configured' : 'not_configured',
+      documents: config.isSupabaseStorageConfigured() ? 'configured' : 'pending_configuration',
       evolutionN8n: config.isN8nInboundConfigured() ? 'secret_configured' : 'pending_configuration'
     }
   });
@@ -147,6 +152,12 @@ app.use((error, req, res, _next) => {
   }
   if (error.code === '42P01') {
     return res.status(503).json({ error: { code: 'DATABASE_SCHEMA_NOT_READY', message: 'O schema do banco ainda não foi aplicado. Execute as migrations e tente novamente.' } });
+  }
+  if (error.code === 'SUPABASE_STORAGE_NOT_CONFIGURED') {
+    return res.status(503).json({ error: { code: 'DOCUMENT_STORAGE_NOT_CONFIGURED', message: 'O armazenamento privado de anexos ainda não está configurado.' } });
+  }
+  if (error.code === 'SUPABASE_STORAGE_UNAVAILABLE') {
+    return res.status(503).json({ error: { code: 'DOCUMENT_STORAGE_UNAVAILABLE', message: 'Não foi possível acessar o anexo. Tente novamente.' } });
   }
   if (isDatabaseConnectionError(error)) {
     return res.status(503).json({ error: { code: 'DATABASE_UNAVAILABLE', message: 'Não foi possível conectar ao banco de dados. Verifique a DATABASE_URL e tente novamente.' } });

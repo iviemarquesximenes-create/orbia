@@ -4,12 +4,24 @@ const { test, after } = require('node:test');
 const assert = require('node:assert/strict');
 process.env.DATABASE_URL = process.env.DATABASE_URL || 'postgresql://test:test@localhost:5432/orbia?sslmode=disable';
 const { getPool, closePool } = require('../src/lib/db');
-const { requireTenant, authorize } = require('../src/middleware/tenant');
+const { requireSyndicAccount, requireTenant, authorize } = require('../src/middleware/tenant');
 
 function response() {
   return { statusCode: 200, body: null, status(code) { this.statusCode = code; return this; }, json(body) { this.body = body; return this; } };
 }
 after(closePool);
+
+test('somente contas globais do tipo sindico podem iniciar cadastro de condomínio', () => {
+  const residentResponse = response();
+  requireSyndicAccount({ user: { account_type: 'resident' } }, residentResponse, () => assert.fail('Morador não pode cadastrar condomínio'));
+  assert.equal(residentResponse.statusCode, 403);
+  assert.equal(residentResponse.body.error.code, 'SYNDIC_ACCOUNT_REQUIRED');
+
+  const syndicResponse = response();
+  let passed = false;
+  requireSyndicAccount({ user: { account_type: 'sindico' } }, syndicResponse, () => { passed = true; });
+  assert.equal(passed, true);
+});
 
 test('tenant alheio é recusado mesmo com UUID válido no header', async (t) => {
   const tenant = 'b3d32b12-53f0-4a3f-89da-941d8f8b9a54';

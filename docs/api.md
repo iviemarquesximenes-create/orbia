@@ -16,7 +16,7 @@ Mutações autenticadas também exigem `X-Orbia-CSRF`, obtido de `GET /api/auth/
 | `POST /api/auth/session` | Valida tokens Supabase no servidor e cria cookies de sessão seguros. |
 | `POST /api/auth/start` | Exige header Origin público válido; cria state/nonce e URL OAuth Manus. |
 | `GET /auth/callback` | Verifica state/nonce, troca código, resolve identidade e cria sessão HTTPS. |
-| `GET /api/auth/me` | Identidade, memberships e token CSRF. |
+| `GET /api/auth/me` | Identidade, tipo global da conta, memberships e token CSRF. |
 | `POST /api/auth/logout` | Exige sessão/CSRF e limpa o cookie da aplicação. |
 | `GET /api/health` | Readiness de banco e migrations; informa integrações pendentes. |
 
@@ -25,7 +25,7 @@ Mutações autenticadas também exigem `X-Orbia-CSRF`, obtido de `GET /api/auth/
 | Método e rota | Comportamento |
 |---|---|
 | `GET /api/tenants` | Lista apenas condomínios associados ao usuário. |
-| `POST /api/tenants` | Cria condomínio, membership admin e fundos Condomínio/Caixinha em transação. |
+| `POST /api/tenants` | Apenas `account_type = 'sindico'` cria condomínio; cria membership `syndic` e fundos Condomínio/Caixinha em transação. |
 | `GET /api/units` | Lista unidades e nomes de moradores; administrador/síndico/financeiro/conselho. |
 | `POST /api/units` | Administrador/síndico cria unidade e, opcionalmente, primeiro morador. |
 
@@ -62,6 +62,7 @@ Não há ainda cobranças mensais, conciliação, comprovantes, estorno/ajuste, 
 - `GET/POST /api/announcements`: lista/cria rascunho. Não administradores recebem apenas comunicados publicados.
 - `POST /api/announcements/:announcementId/publish`: publicação no ORBIA por administrador/síndico; não envia WhatsApp.
 - `GET/POST /api/review`: fila sensível/manual, com permissões `review:read`/`review:create`.
+- `GET /api/review/:itemId/attachments/:attachmentIndex/url`: emite URL privada assinada por cinco minutos para revisor autorizado.
 - `POST /api/review/:itemId/action`: `approve`, `reject`, `ignore`, `clarify`; exige `review:decide` e registra auditoria.
 
 A revisão está restrita a administrador/síndico/financeiro. Aprovar triagem não cria um movimento financeiro. Pedir esclarecimento apenas registra estado; não envia mensagem externa. O CRUD é de criação/listagem e das transições explicitamente citadas, não CRUD completo de todos os módulos.
@@ -70,6 +71,7 @@ A revisão está restrita a administrador/síndico/financeiro. Aprovar triagem n
 
 - `GET/POST /api/integrations`: lista/cadastra instância pendente.
 - `POST /api/integrations/:integrationId/activate`: habilita entrada após configuração do segredo; audita a alteração. Não testa conectividade Evolution.
+- `POST /api/integrations/evolution/media`: recebe imagem/PDF binário autorizado pelo webhook e armazena em bucket privado.
 - `POST /api/integrations/evolution/events`: contrato normalizado, segredo, origem, integração e delivery ID estável; resolve tenant internamente; persiste evento e mensagem na fila.
 
 Ver `docs/evolution-n8n.md` para headers/payload. Saída não implementada; status `outboundImplemented: false`.

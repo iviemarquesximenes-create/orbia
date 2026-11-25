@@ -34,7 +34,7 @@
     for (const item of items) {
       const row = node('article', 'integration-row');
       const copy = node('div');
-      copy.append(node('strong', '', item.display_name), node('small', '', `Instância: ${item.instance_name} · Entrada n8n: ${item.inboundConfigured ? 'segredo configurado' : 'pendente'} · Saída: não implementada`));
+      copy.append(node('strong', '', item.display_name), node('small', '', `Instância: ${item.instance_name} · Entrada n8n: ${item.inboundConfigured ? 'segredo configurado' : 'pendente'} · Armazenamento de anexos: ${item.attachmentsConfigured ? 'credencial configurada' : 'pendente'} · Saída: não implementada`));
       const status = node('span', 'integration-state', item.status === 'active' ? 'Entrada habilitada' : item.status === 'error' ? 'Com erro' : 'Pendente');
       row.append(copy, status);
       if (item.status === 'pending' && item.inboundConfigured && ['admin','syndic'].includes(state.tenant?.role)) {

@@ -64,6 +64,8 @@ test('webhook não é bloqueado pelo login e falha fechado sem credencial', asyn
   assert.equal(wrongMethod.status, 405);
   const post = await fetch(base + '/api/integrations/evolution/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
   assert.equal(post.status, config.isN8nInboundConfigured() ? 401 : 503);
+  const media = await fetch(base + '/api/integrations/evolution/media', { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: Buffer.from([137, 80, 78, 71]) });
+  assert.equal(media.status, config.isN8nInboundConfigured() ? 401 : 503);
 });
 
 test('callback sem state vinculado falha fechado e rota desconhecida retorna 404', async () => {

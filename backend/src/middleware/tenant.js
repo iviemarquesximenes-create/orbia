@@ -17,6 +17,13 @@ function hasPermission(role, permission) {
   return list.includes('*') || list.includes(permission);
 }
 
+function requireSyndicAccount(req, res, next) {
+  if (req.user?.account_type !== 'sindico') {
+    return apiError(res, 403, 'SYNDIC_ACCOUNT_REQUIRED', 'Somente uma conta do tipo Síndico pode cadastrar um condomínio.');
+  }
+  return next();
+}
+
 async function requireTenant(req, res, next) {
   const tenantId = req.get('x-orbia-tenant-id');
   if (!isUuid(tenantId)) return apiError(res, 400, 'TENANT_REQUIRED', 'Selecione um condomínio válido.');
@@ -42,4 +49,4 @@ function authorize(permission) {
   };
 }
 
-module.exports = { ROLE_PERMISSIONS, hasPermission, requireTenant, authorize };
+module.exports = { ROLE_PERMISSIONS, hasPermission, requireSyndicAccount, requireTenant, authorize };
