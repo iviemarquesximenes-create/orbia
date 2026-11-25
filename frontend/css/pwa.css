@@ -1,0 +1,30 @@
+.pwa-login-install { margin-top: 14px; }
+.pwa-login-install > button { width: 100%; }
+.pwa-status { margin: 8px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.pwa-status:empty { display: none; }
+.pwa-install-card { display: flex; gap: 18px; align-items: flex-start; }
+.pwa-install-card > img { width: 64px; height: 64px; flex: 0 0 64px; border-radius: 16px; border: 1px solid var(--border); }
+.pwa-install-card > div { min-width: 0; }
+.pwa-install-card h2 { margin-bottom: 8px; }
+.pwa-install-card p { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 8px 0 16px; }
+.pwa-install-dialog { width: min(520px, calc(100% - 32px)); max-height: min(90dvh, 780px); margin: auto; padding: 28px; border: 1px solid var(--border); border-radius: 24px; color: var(--ink); background: var(--white); overflow-y: auto; overscroll-behavior: contain; }
+.pwa-install-dialog::backdrop { background: rgba(18, 42, 35, .42); }
+.pwa-guide-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.pwa-guide-heading img { width: 52px; height: 52px; }
+.pwa-guide-heading button { width: 48px; min-height: 48px; }
+.pwa-install-dialog h2 { font-size: 28px; letter-spacing: -.04em; line-height: 1.15; margin: 0 0 16px; }
+.pwa-install-dialog p, .pwa-install-dialog li { font-size: 15px; line-height: 1.65; }
+.pwa-install-dialog ol { padding-left: 24px; }
+.pwa-install-dialog li { padding: 4px 0 8px 6px; }
+.pwa-guide-note { padding: 14px 16px; border-radius: 14px; background: var(--lime-soft); color: var(--ink); }
+.pwa-install-dialog > .button { width: 100%; margin-top: 10px; }
+.pwa-standalone [data-pwa-install], .pwa-standalone [data-pwa-install-card] { display: none !important; }
+@media (max-width: 820px) {
+  .pwa-install-dialog { width: 100%; max-width: none; max-height: 92dvh; margin: auto 0 0; border-radius: 26px 26px 0 0; padding: 24px 24px calc(24px + env(safe-area-inset-bottom)); }
+  .pwa-install-card { gap: 12px; }
+  .pwa-install-card > img { width: 48px; height: 48px; flex-basis: 48px; }
+  .pwa-install-card .button { width: 100%; }
+}
+@media (display-mode: standalone) {
+  [data-pwa-install], [data-pwa-install-card] { display: none !important; }
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#00B875" name="theme-color"/>
+<meta content="Gestão condominial ORBIA: finanças, manutenção e comunidade em ordem." name="description"/>
+<title>Visão geral — ORBIA</title>
+<link href="/manus-storage/async-images/KXOoic961zEmCQ4t1Ne4Sc/image-1.webp" rel="icon" type="image/webp"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="/css/orbia.css?v=a2db241c014a" rel="stylesheet"/><link href="/css/shell.css?v=15f216684354" rel="stylesheet"/><link href="/css/components.css?v=49ceb22eae6b" rel="stylesheet"/><link href="/css/pages.css?v=2653f4c47fd9" rel="stylesheet"/><link href="/css/flows.css?v=e9cf79aa360d" rel="stylesheet"/>
+<script defer="" src="/js/api.js?v=a69dc58e9ba8"></script>
+<script defer="" src="/js/app-shell.js?v=7b9c5fa84811"></script>
+<script defer="" src="/js/dashboard.js?v=7a8fad61bfdf"></script><script defer="" src="/js/flows.js?v=a32689789893"></script><script defer="" src="/js/page-ui.js?v=a2cbe0dce3e8"></script>
+<meta content="yes" name="mobile-web-app-capable"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="ORBIA" name="apple-mobile-web-app-title"/><meta content="default" name="apple-mobile-web-app-status-bar-style"/><link crossorigin="use-credentials" href="/manifest.webmanifest" rel="manifest"/><link href="/assets/pwa/apple-touch-icon.png?v=3c49ef2f34f9" rel="apple-touch-icon" sizes="180x180"/><link href="/css/pwa.css?v=d5a05ee4690f" rel="stylesheet"/><script defer="" src="/js/pwa.js?v=2cd9aa0af11c"></script></head>
+<body data-page="dashboard">
+<div class="app-shell">
+<aside aria-label="Navegação principal" class="sidebar">
+<a aria-label="ORBIA — início" class="brand" href="/">
+<img alt="" class="brand-mark" src="/manus-storage/async-images/KXOoic961zEmCQ4t1Ne4Sc/image-1.webp"/>
+<span class="brand-copy"><strong>ORBIA</strong><small>Gestão de condomínios</small></span>
+</a>
+<div class="sidebar-context">
+<label class="field-label" for="tenant-select-desktop">Condomínio ativo</label>
+<select aria-label="Selecionar condomínio" class="tenant-select input-select" id="tenant-select-desktop"></select>
+<span class="tenant-name tenant-name--sidebar">Carregando…</span>
+<span class="demo-badge badge badge--demo" hidden="">DEMO</span>
+</div>
+<nav class="primary-nav">
+<a data-page-link="dashboard" href="/"><span aria-hidden="true" class="nav-marker"></span>Visão geral</a>
+<a data-page-link="financial" href="/pages/financial.html"><span aria-hidden="true" class="nav-marker"></span>Financeiro</a>
+<a data-page-link="units" href="/pages/units.html"><span aria-hidden="true" class="nav-marker"></span>Unidades</a>
+<a data-page-link="operations" href="/pages/operations.html"><span aria-hidden="true" class="nav-marker"></span>Operação</a>
+<a data-page-link="intelligence" href="/pages/intelligence.html"><span aria-hidden="true" class="nav-marker"></span>Inteligência</a>
+<a data-page-link="settings" href="/pages/settings.html"><span aria-hidden="true" class="nav-marker"></span>Configurações</a>
+</nav>
+<div class="sidebar-bottom">
+<div class="user-brief"><span aria-hidden="true" class="user-avatar">O</span><span><strong class="current-user">Usuário</strong><small class="role-label">carregando</small></span></div>
+<button class="button button--quiet logout-button" type="button">Encerrar sessão</button>
+</div>
+</aside>
+<div class="main-column">
+<header class="topbar">
+<button aria-expanded="false" aria-label="Abrir navegação" class="mobile-menu-button" id="mobile-menu-button" type="button">Menu</button>
+<div class="topbar-context"><span class="topbar-kicker">Seu condomínio</span><strong class="tenant-name">Carregando…</strong></div>
+<div class="topbar-meta"><span class="role-label">carregando</span><span class="demo-badge badge badge--demo" hidden="">DEMO</span><span class="topbar-date" id="today-label">Hoje</span></div>
+</header>
+<main class="page-content">
+<div class="notice notice--error" hidden="" id="global-error" role="alert"></div>
+<section aria-labelledby="onboarding-title" class="onboarding-panel creation-card" hidden="" id="tenant-onboarding">
+<div class="onboarding-intro"><p class="eyebrow">Primeiro passo</p><h1 id="onboarding-title">Vamos organizar seu condomínio.</h1><p>Crie o espaço do seu condomínio. Você poderá adicionar unidades, moradores e configurar os fundos em seguida.</p></div>
+<button class="button button--primary flow-launch" data-flow-open="create-tenant-form" hidden="" type="button">+ Criar condomínio</button><form class="form-stack flow-park" data-flow="" data-flow-description="Seu espaço, com os fundos separados desde o início." data-flow-title="Criar condomínio" id="create-tenant-form" novalidate="">
+<p class="legal-note">A criação também prepara os fundos Condomínio e Caixinha. Nenhum dado de exemplo será inserido.</p>
+<div class="flow-step" data-description="Informe o nome e, se desejar, o endereço do condomínio." data-title="Vamos criar seu espaço"><label class="form-field"><span>Nome do condomínio</span><input maxlength="180" name="name" placeholder="Ex.: Residencial Jardim das Oliveiras" required=""/></label><label class="form-field"><span>Endereço <small>opcional</small></span><input maxlength="500" name="address" placeholder="Rua, número e cidade"/></label></div><button class="button button--primary flow-submit" type="submit">Criar condomínio</button></form>
+</section>
+<div hidden="" id="dashboard-content">
+<section class="page-heading">
+<div><p class="eyebrow">Painel de gestão</p><p class="dashboard-greeting">Olá. Vamos cuidar do seu condomínio?</p><h1>Seu condomínio, em dia.</h1><p>Veja o que mudou e o que merece atenção.</p></div>
+<div class="page-heading-actions"><span class="period-label" id="dashboard-period">Resumo atualizado</span></div>
+</section><section aria-label="Ações rápidas" class="app-actions"><a class="action-tile" href="/pages/financial.html#payments"><svg aria-hidden="true" class="action-icon" viewbox="0 0 24 24"><use href="/assets/orbia-icons.svg?v=138e9755275f#financial"></use></svg><span class="action-label">Registrar pagamento</span></a><a class="action-tile" href="/pages/financial.html#expenses"><svg aria-hidden="true" class="action-icon" viewbox="0 0 24 24"><use href="/assets/orbia-icons.svg?v=138e9755275f#financial"></use></svg><span class="action-label">Solicitar despesa</span></a><a class="action-tile" href="/pages/operations.html#occurrences"><svg aria-hidden="true" class="action-icon" viewbox="0 0 24 24"><use href="/assets/orbia-icons.svg?v=138e9755275f#operations"></use></svg><span class="action-label">Nova ocorrência</span></a><a class="action-tile" href="/pages/units.html"><svg aria-hidden="true" class="action-icon" viewbox="0 0 24 24"><use href="/assets/orbia-icons.svg?v=138e9755275f#units"></use></svg><span class="action-label">Unidades</span></a></section>
+<section aria-label="Resumo financeiro" class="dashboard-lead">
+<div class="balance-feature">
+<div class="balance-feature-top"><span>Saldo total registrado</span><span class="data-origin">Atualizado pelo ledger</span></div>
+<strong class="balance-total" id="total-balance">—</strong><button aria-label="Ocultar saldo" aria-pressed="false" class="balance-visibility" type="button">Ocultar</button>
+<p>Somatório dos fundos ativos.</p>
+<a class="text-link text-link--light" href="/pages/financial.html">Abrir financeiro <span aria-hidden="true">→</span></a>
+</div>
+<div class="fund-summary-panel">
+<div class="section-heading"><div><p class="eyebrow">Separados por finalidade</p><h2>Fundos</h2></div><a class="text-link" href="/pages/financial.html">Ver extrato</a></div>
+<div class="fund-summary-list" id="fund-summary"><p class="empty-inline">Carregando fundos…</p></div>
+</div>
+</section>
+<section aria-label="Movimentações do mês" class="metric-strip">
+<article class="metric-item"><span class="metric-label">Entradas neste mês</span><strong id="month-inflow">—</strong><span class="metric-note">Movimentos lançados</span></article>
+<article class="metric-item"><span class="metric-label">Saídas neste mês</span><strong id="month-outflow">—</strong><span class="metric-note">Despesas aprovadas</span></article>
+<article class="metric-item"><span class="metric-label">Unidades ativas</span><strong id="unit-count">—</strong><span class="metric-note">Neste condomínio</span></article>
+</section>
+<section class="dashboard-workspace">
+<article class="surface-card operations-card">
+<div class="section-heading"><div><p class="eyebrow">Acompanhar</p><h2>Frentes abertas</h2></div><a class="text-link" href="/pages/operations.html">Ver operação</a></div>
+<div class="status-list">
+<a class="status-row" href="/pages/operations.html#occurrences"><span aria-hidden="true" class="status-symbol status-symbol--amber"></span><span><strong>Ocorrências em andamento</strong><small>Itens aguardando resolução</small></span><b id="open-occurrences">0</b></a>
+<a class="status-row" href="/pages/financial.html#expenses"><span aria-hidden="true" class="status-symbol status-symbol--coral"></span><span><strong>Despesas em revisão</strong><small>Não afetam o saldo até aprovação</small></span><b id="pending-expenses">0</b></a>
+<a class="status-row" href="/pages/intelligence.html"><span aria-hidden="true" class="status-symbol status-symbol--teal"></span><span><strong>Itens para revisar</strong><small>Informações aguardando confirmação</small></span><b id="pending-reviews">0</b></a>
+</div>
+</article>
+<details class="context-details"><summary>Como funciona a rastreabilidade?</summary><article class="surface-card origin-card">
+<div aria-hidden="true" class="origin-mark"><img alt="" src="/manus-storage/async-images/KXOoic961zEmCQ4t1Ne4Sc/image-1.webp"/></div>
+<p class="eyebrow">Gestão com contexto</p>
+<h2>Toda movimentação tem origem e histórico.</h2>
+<p>Pagamentos, despesas e revisões ficam vinculados ao condomínio e preservam a trilha de auditoria.</p>
+<a class="text-link" href="/pages/intelligence.html">Conhecer a central de revisão <span aria-hidden="true">→</span></a>
+</article></details>
+</section>
+<section class="surface-card recent-card">
+<div class="section-heading"><div><p class="eyebrow">-</p><h2>Atividade financeira recente</h2></div><a class="text-link" href="/pages/financial.html">Abrir extrato</a></div>
+<div class="empty-state empty-state--compact" id="recent-activity"><p class="empty-title">Ainda não há movimentações.</p><p>Quando houver um pagamento ou despesa lançado, o histórico aparecerá aqui.</p></div>
+</section>
+</div>
+</main>
+<footer class="footer-bar"><span>ORBIA <span class="footer-separator">·</span> Gestão com histórico à vista</span><span>Dados do condomínio ativo</span></footer>
+</div>
+</div>
+<div aria-atomic="true" aria-live="polite" class="toast-region" id="toast-region"></div>
+<template id="flow-template">
+<dialog aria-labelledby="flow-title" class="flow-dialog">
+<header class="flow-header"><button aria-label="Voltar à etapa anterior" class="flow-back icon-button" type="button">←</button><span class="flow-progress" role="status"></span><button aria-label="Fechar formulário" class="flow-close icon-button" type="button">✕</button></header>
+<div class="flow-body"><p class="eyebrow">Vamos por partes</p><h2 class="flow-title" id="flow-title" tabindex="-1"></h2><p class="flow-description"></p><div class="flow-fields"></div><section aria-label="Revisar informações" class="flow-review" hidden=""></section><p class="flow-feedback notice notice--error" hidden="" role="alert"></p></div>
+<footer class="flow-footer"><button class="flow-prev button button--outline" type="button">Voltar</button><button class="flow-next button button--primary" type="button">Continuar</button></footer>
+</dialog>
+</template></body>
+</html>
