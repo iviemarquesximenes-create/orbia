@@ -5,20 +5,31 @@ const { config } = require('./config');
 
 let pool = null;
 
+function databaseConfigurationError(code, message) {
+  const error = new Error(message);
+  error.code = code;
+  return error;
+}
+
 function getPool() {
   if (!config.databaseUrl) {
-    throw new Error('DATABASE_URL não está configurada.');
+    throw databaseConfigurationError('DATABASE_URL_NOT_CONFIGURED', 'DATABASE_URL não está configurada.');
   }
   if (pool) return pool;
 
-  const uri = new URL(config.databaseUrl);
+  let uri;
+  try {
+    uri = new URL(config.databaseUrl);
+  } catch {
+    throw databaseConfigurationError('DATABASE_URL_INVALID', 'DATABASE_URL não é uma URL válida.');
+  }
   if (!['postgres:', 'postgresql:'].includes(uri.protocol)) {
-    throw new Error('DATABASE_URL precisa usar o protocolo PostgreSQL.');
+    throw databaseConfigurationError('DATABASE_URL_INVALID', 'DATABASE_URL precisa usar o protocolo PostgreSQL.');
   }
   const sslMode = uri.searchParams.get('sslmode')?.toLowerCase();
   const localHosts = new Set(['localhost', '127.0.0.1', '::1']);
   if (sslMode === 'disable' && !localHosts.has(uri.hostname)) {
-    throw new Error('Conexões PostgreSQL remotas precisam de TLS.');
+    throw databaseConfigurationError('DATABASE_TLS_REQUIRED', 'Conexões PostgreSQL remotas precisam de TLS.');
   }
   uri.searchParams.delete('sslmode');
   pool = new Pool({

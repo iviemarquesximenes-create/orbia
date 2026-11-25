@@ -73,6 +73,27 @@
     }
   }
 
+  function showUnavailableState() {
+    for (const element of document.querySelectorAll('.tenant-name, .mobile-tenant-name')) {
+      element.textContent = 'Condomínio indisponível';
+    }
+    for (const element of document.querySelectorAll('.role-label, .mobile-account-role, .current-user')) {
+      element.textContent = 'Perfil indisponível';
+    }
+    for (const select of document.querySelectorAll('select.tenant-select')) {
+      const option = document.createElement('option');
+      option.value = '';
+      option.textContent = 'Condomínio indisponível';
+      select.replaceChildren(option);
+      select.disabled = true;
+    }
+    for (const element of document.querySelectorAll('.empty-inline, .empty-state, .table-empty')) {
+      if (/^(carregando|verificando configurações)/i.test(element.textContent.trim())) {
+        element.textContent = 'Não foi possível carregar os dados.';
+      }
+    }
+  }
+
   async function init() {
     try {
       const result = await api('/api/auth/me');
@@ -95,6 +116,7 @@
         region.hidden = false;
         region.textContent = error.message;
       }
+      showUnavailableState();
       throw error;
     }
   }

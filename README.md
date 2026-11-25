@@ -16,7 +16,7 @@ O login aceita e-mail e senha, cadastro e solicitação de redefinição de senh
 
 A migration `database/supabase/001_orbia_schema.sql` cria no Supabase Auth e Postgres os perfis, usuários, condomínios, vínculos e tabelas de domínio com políticas RLS por condomínio. A API usa `pg` e grava no PostgreSQL do Supabase. Aplique a migration pelo SQL Editor do Supabase ou execute `pnpm db:migrate` com `DATABASE_URL` configurada; a migration é registrada em `schema_migrations` nos dois caminhos. As migrations MySQL antigas foram preservadas em `database/legacy-mysql-migrations/` apenas como histórico e não são usadas pela aplicação.
 
-Configure `DATABASE_URL` no ambiente do servidor com a connection string PostgreSQL do Supabase, preferencialmente o Transaction Pooler para Vercel (porta 6543). Mantenha essa variável secreta, separada da chave publicável, e nunca a inclua no frontend. O pool exige TLS com validação do certificado; para desenvolvimento local, `sslmode=disable` só é aceito em `localhost`.
+Configure `DATABASE_URL` no ambiente do servidor com a connection string PostgreSQL do Supabase (`postgresql://...`), preferencialmente o Transaction Pooler para Vercel (porta 6543). Não use a URL HTTPS do projeto Supabase nessa variável. Mantenha a connection string secreta, separada da chave publicável, e nunca a inclua no frontend. O pool exige TLS com validação do certificado; para desenvolvimento local, `sslmode=disable` só é aceito em `localhost`.
 
 Para tentar evitar a pausa automática do plano gratuito, depois de aplicar a migration adicione os secrets `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` no GitHub Actions. O workflow `.github/workflows/supabase-keepalive.yml` chama diariamente uma função que faz uma atualização mínima no banco. Isso é apenas uma tentativa de manter atividade e não é garantia contra mudanças nos critérios de inatividade ou atrasos do GitHub Actions; o plano Pro é a opção confiável para evitar pausa automática.
 
@@ -74,7 +74,7 @@ pnpm build
 
 ## Evidência desta versão
 
-46 testes automatizados passaram, cobrindo moeda, datas, permissões, sessão, autorização SQL controlada, páginas públicas, manifesto, API e PWA. Build verificou a sintaxe JavaScript, rotas e referências locais; também confirmou que o entrypoint Express e os assets PWA/páginas são publicados em `public/`. Os testes de aplicação usam SQL controlado; a conexão real com PostgreSQL/Supabase e a migration remota ainda precisam ser validadas com a `DATABASE_URL` do projeto.
+51 testes automatizados passaram, cobrindo moeda, datas, permissões, sessão, autorização SQL controlada, health check, estados de falha de carregamento, páginas públicas, manifesto, API e PWA. Build verificou a sintaxe JavaScript, rotas e referências locais; também confirmou que o entrypoint Express e os assets PWA/páginas são publicados em `public/`. Os testes de aplicação usam SQL controlado; a conexão real com PostgreSQL/Supabase e a migration remota ainda precisam ser validadas com a `DATABASE_URL` do projeto.
 
 Os testes de isolamento usam dependência SQL controlada e não gravam no banco. Não foi feito teste real de lançamento financeiro, conexão externa ou callback OAuth completo de usuário; esses resultados não devem ser inferidos dos testes unitários.
 
